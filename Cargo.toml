@@ -1,0 +1,7 @@
+[package]
+name = "rust-semantic-core"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+pg-triple-store = { git = "https://github.com/enbyio/pg-triple-store.git", version = "0.2.1" }
