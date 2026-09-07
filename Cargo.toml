@@ -5,7 +5,9 @@ edition = "2024"
 
 [dependencies]
 anyhow = "1.0.104"
+askama = "0.16.0"
 axum = "0.8.9"
-pg-triple-store = { git = "https://github.com/enbyio/pg-triple-store.git", version = "0.2.1" }
+pg-triple-store = { git = "https://github.com/enbyio/pg-triple-store.git", version = "0.2.2" }
+serde = { version = "1.0.229", features = ["derive"] }
 tokio = { version = "1.53.1", features = ["macros", "rt-multi-thread"] }
 tracing-subscriber = "0.3.23"

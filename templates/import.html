@@ -1,0 +1,24 @@
+{% extends "_layout.html" %}
+<!-- -->
+{%- block title -%} Import Data {%- endblock -%}
+<!-- -->
+{%- block content -%}
+<h1>Import Data</h1>
+<form action="/import_data" method="post">
+    <input type="radio" id="ttl" name="format" value="ttl"
+        {% if form.file_type == FileType::Ttl %}checked{% endif %} />
+    <label for="ttl">TTL</label>
+    <input type="radio" id="rdf" name="format" value="rdf"
+        {% if form.file_type == FileType::Rdf %}checked{% endif %} />
+    <label for="rdf">RDF/XML</label><br />
+    <textarea name="text" rows="20" cols="40">{{form.data}}</textarea>
+    <br />
+    <button type="submit">Import Data</button>
+</form>
+<hr />
+{% if let Some(status) = result %}
+<h2>Status:</h2>
+<p>{{ status }}</p>
+{% endif %}
+<!--  -->
+{%- endblock -%}

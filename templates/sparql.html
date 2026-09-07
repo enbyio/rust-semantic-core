@@ -1,0 +1,18 @@
+{% extends "_layout.html" %}
+<!--  -->
+{%- block title -%} Sparql Query {%- endblock -%}
+<!-- -->
+{%- block content -%}
+<h1>Sparql Query:</h1>
+<form action="/process" method="post">
+    <textarea name="text" rows="8" cols="40">{{original}}</textarea>
+    <br />
+    <button type="submit">Run Query</button>
+</form>
+{% if let Some(result) = processed %}
+<hr />
+<h2>Result:</h2>
+<p>{{ result }}</p>
+{% endif %}
+<!-- -->
+{%- endblock -%}

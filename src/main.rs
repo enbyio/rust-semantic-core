@@ -1,10 +1,13 @@
 use std::sync::Arc;
 
 use axum::Router;
-use axum::routing::get;
+use axum::routing::{get, post};
 use pg_triple_store::store::TripleStore;
 
-use crate::routes::root::root;
+use crate::routes::import::{import_data, process_import};
+use crate::routes::sparql::{process, sparql};
+
+// use crate::routes::root::root;
 
 pub mod routes;
 
@@ -17,15 +20,21 @@ pub struct AppState {
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt::init();
     let store = TripleStore::new_from_env().unwrap();
+
+    store.import_turtle_file("test_data/data.ttl").unwrap();
+
     let state = AppState {
         store: Arc::new(store)
     };
 
     let router = Router::new()
-        .route("/", get(root))
+        .route("/", get(sparql))
+        .route("/import_data", get(import_data))
+        .route("/import_data", post(process_import))
+        .route("/process", post(process))
         .with_state(state);
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await?;
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:8080").await?;
         axum::serve(listener, router).await?;
 
     Ok(())
