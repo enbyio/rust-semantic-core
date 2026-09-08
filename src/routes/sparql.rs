@@ -2,6 +2,7 @@ use askama::Template;
 use axum::Form;
 use axum::extract::State;
 use axum::response::{Html, IntoResponse};
+use pg_triple_store::query::solution::QueryResult;
 use serde::Deserialize;
 
 use crate::AppState;
@@ -10,12 +11,17 @@ use crate::AppState;
 #[template(path = "sparql.html")]
 struct SparqlTemplate {
     original: String,
-    processed: Option<String>,
+    processed: Option<QueryOutcome>,
 }
 
 #[derive(Deserialize)]
 pub(crate) struct FormInput {
     text: String
+}
+
+pub enum QueryOutcome {
+    Result(QueryResult),
+    Error(String),
 }
 
 pub(crate) async fn sparql() -> impl IntoResponse {
@@ -33,8 +39,8 @@ pub(crate) async fn process(
     State(state): State<AppState>,
     Form(input): Form<FormInput>) -> impl IntoResponse {
     let result = match state.store.query(input.text.clone()) {
-        Ok(o) => o.to_string(),
-        Err(e) => format!("Error Processing sparql Query: {e:?}"),
+        Ok(o) => QueryOutcome::Result(o),
+        Err(e) => QueryOutcome::Error(format!("Error Processing sparql Query: {e:?}")),
     };
 
     let template = SparqlTemplate {
