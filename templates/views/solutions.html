@@ -1,0 +1,21 @@
+<h2>Solutions ({{ solset.rows.len() }})</h2>
+<table class="results">
+  <thead>
+    <tr>{% for v in solset.vars %}<th>{{ v }}</th>{% endfor %}</tr>
+  </thead>
+  <tbody>
+    {% for row in solset.rows %}
+    <tr>
+      {% for v in solset.vars %}
+      <td>
+        {% if let Some(term) = row.get(v) %}
+          {{ term }}
+        {% else %}
+          <span class="unbound">unbound</span>
+        {% endif %}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -1,0 +1,13 @@
+<h2>Graph ({{ triples.len() }} triples)</h2>
+<table class="results">
+  <thead><tr><th>Subject</th><th>Predicate</th><th>Object</th></tr></thead>
+  <tbody>
+    {% for t in triples %}
+    <tr>
+      <td>{{ t.subject }}</td>
+      <td>{{ t.predicate }}</td>
+      <td>{{ t.object }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

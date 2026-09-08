@@ -15,52 +15,15 @@
   {% when QueryOutcome::Result with (qr) %}
     {% match qr %}
       {% when QueryResult::Solutions with (solset) %}
-        <h2>Solutions ({{ solset.rows.len() }})</h2>
-        <table class="results">
-          <thead>
-            <tr>{% for v in solset.vars %}<th>{{ v }}</th>{% endfor %}</tr>
-          </thead>
-          <tbody>
-            {% for row in solset.rows %}
-            <tr>
-              {% for v in solset.vars %}
-              <td>
-                {% if let Some(term) = row.get(v) %}
-                  {{ term }}
-                {% else %}
-                  <span class="unbound">unbound</span>
-                {% endif %}
-              </td>
-              {% endfor %}
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-
+        {% include "views/solutions.html" %}
       {% when QueryResult::Boolean with (val) %}
-        <h2>Result</h2>
-        <p class="bool-result {% if *val %}true{% else %}false{% endif %}">
-          {{ val }}
-        </p>
-
+        {% include "views/boolean.html" %}
       {% when QueryResult::Graph with (triples) %}
-        <h2>Graph ({{ triples.len() }} triples)</h2>
-        <table class="results">
-          <thead><tr><th>Subject</th><th>Predicate</th><th>Object</th></tr></thead>
-          <tbody>
-            {% for t in triples %}
-            <tr>
-              <td>{{ t.subject }}</td>
-              <td>{{ t.predicate }}</td>
-              <td>{{ t.object }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        {% include "views/graph.html" %}
     {% endmatch %}
 
   {% when QueryOutcome::Error with (e) %}
-    <p class="error">Error processing SPARQL query: {{ e }}</p>
+    {% include "views/error.html" %}
 {% endmatch %}
 {% endif %}
 <!-- -->
