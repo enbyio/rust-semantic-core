@@ -57,7 +57,7 @@ pub(crate) async fn process_import(
 
     let (data, result) = match outcome {
         Ok(_) => (String::new(), Some("Import successful".to_string())),
-        Err(e) => (input.text, Some(format!("Error importing data: {e:?}"))),
+        Err(_) => (input.text, Some(format!("Error importing data, see internal log for details"))),
     };
 
     let template = ImportTemplate {
