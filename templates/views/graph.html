@@ -1,10 +1,5 @@
 <h2>Graph ({{ triples.len() }} triples)</h2>
 
-  <form method="post" action="/download/rdfxml" class="download-form">
-    <input type="hidden" name="query" value="{{ original }}">
-    <button type="submit">Download as RDF/XML</button>
-  </form>
-
   <table class="results">
     <thead><tr><th>Subject</th><th>Predicate</th><th>Object</th></tr></thead>
     <tbody>
@@ -17,3 +12,8 @@
       {% endfor %}
     </tbody>
   </table>
+
+  <form method="post" action="/download/rdfxml" class="download-form">
+    <input type="hidden" name="query" value="{{ original }}">
+    <button type="submit">Download as RDF/XML</button>
+  </form>
