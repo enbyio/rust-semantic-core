@@ -4,6 +4,7 @@ use axum::Router;
 use axum::routing::{get, post};
 use pg_triple_store::store::TripleStore;
 
+use crate::routes::download::download_rdfxml;
 use crate::routes::import::{import_data, process_import};
 use crate::routes::sparql::{process, sparql};
 
@@ -31,9 +32,10 @@ async fn main() -> anyhow::Result<()> {
 
     let router = Router::new()
         .route("/", get(sparql))
+        .route("/", post(process))
         .route("/import_data", get(import_data))
         .route("/import_data", post(process_import))
-        .route("/process", post(process))
+        .route("/download/rdfxml", post(download_rdfxml))
         .with_state(state);
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:8080").await?;
