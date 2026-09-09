@@ -23,9 +23,8 @@ async fn main() -> anyhow::Result<()> {
     let store = TripleStore::new_from_env().unwrap();
 
     #[cfg(debug_assertions)] {
-    store.reset_db().unwrap();
-
-    store.import_turtle_file("test_data/data.ttl").unwrap();
+        store.reset_db().unwrap();
+        store.import_turtle_file("test_data/data.ttl").unwrap();
     }
 
     let state = AppState {
