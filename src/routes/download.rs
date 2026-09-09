@@ -21,7 +21,6 @@ pub async fn download_rdfxml(
     print!("{}", form.query);
     match state.store.query(form.query) {
         Ok(QueryResult::Graph(triples)) => {
-            // adjust to whatever your store's actual serialization fn is called
             match state.store.export_as_rdfxml(&triples) {
                 Ok(xml) => (
                     StatusCode::OK,
