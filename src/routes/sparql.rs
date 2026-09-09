@@ -16,7 +16,7 @@ struct SparqlTemplate {
 
 #[derive(Deserialize)]
 pub(crate) struct FormInput {
-    text: String
+    text: String,
 }
 
 pub enum QueryOutcome {
@@ -29,7 +29,8 @@ pub(crate) async fn sparql() -> impl IntoResponse {
         original: "SELECT ?person ?org WHERE {
            ?person ex:knows ex:bob .
            ?org ex:partOf ex:consortium .
-         }".to_string(),
+         }"
+        .to_string(),
         processed: None,
     };
     Html(template.render().unwrap())
@@ -37,7 +38,8 @@ pub(crate) async fn sparql() -> impl IntoResponse {
 
 pub(crate) async fn process(
     State(state): State<AppState>,
-    Form(input): Form<FormInput>) -> impl IntoResponse {
+    Form(input): Form<FormInput>,
+) -> impl IntoResponse {
     let result = match state.store.query(input.text.clone()) {
         Ok(o) => QueryOutcome::Result(o),
         Err(e) => QueryOutcome::Error(format!("Error Processing sparql Query: {e:?}")),

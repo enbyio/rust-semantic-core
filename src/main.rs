@@ -22,13 +22,14 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt::init();
     let store = TripleStore::new_from_env().unwrap();
 
-    #[cfg(debug_assertions)] {
+    #[cfg(debug_assertions)]
+    {
         store.reset_db().unwrap();
         store.import_turtle_file("test_data/data.ttl").unwrap();
     }
 
     let state = AppState {
-        store: Arc::new(store)
+        store: Arc::new(store),
     };
 
     let router = Router::new()
@@ -40,7 +41,7 @@ async fn main() -> anyhow::Result<()> {
         .with_state(state);
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:8080").await?;
-        axum::serve(listener, router).await?;
+    axum::serve(listener, router).await?;
 
     Ok(())
 }

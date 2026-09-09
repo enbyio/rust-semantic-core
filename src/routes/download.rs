@@ -1,8 +1,8 @@
 use axum::{
-    extract::State,
-    http::{header, StatusCode},
-    response::{IntoResponse, Response},
     Form,
+    extract::State,
+    http::{StatusCode, header},
+    response::{IntoResponse, Response},
 };
 use pg_triple_store::query::solution::QueryResult;
 use serde::Deserialize;
@@ -20,27 +20,25 @@ pub async fn download_rdfxml(
 ) -> Response {
     print!("{}", form.query);
     match state.store.query(form.query) {
-        Ok(QueryResult::Graph(triples)) => {
-            match state.store.export_as_rdfxml(&triples) {
-                Ok(xml) => (
-                    StatusCode::OK,
-                    [
-                        (header::CONTENT_TYPE, "application/rdf+xml"),
-                        (
-                            header::CONTENT_DISPOSITION,
-                            "attachment; filename=\"result.rdf\"",
-                        ),
-                    ],
-                    xml,
-                )
-                    .into_response(),
-                Err(e) => (
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    format!("Failed to serialize RDF/XML: {e:?}"),
-                )
-                    .into_response(),
-            }
-        }
+        Ok(QueryResult::Graph(triples)) => match state.store.export_as_rdfxml(&triples) {
+            Ok(xml) => (
+                StatusCode::OK,
+                [
+                    (header::CONTENT_TYPE, "application/rdf+xml"),
+                    (
+                        header::CONTENT_DISPOSITION,
+                        "attachment; filename=\"result.rdf\"",
+                    ),
+                ],
+                xml,
+            )
+                .into_response(),
+            Err(e) => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                format!("Failed to serialize RDF/XML: {e:?}"),
+            )
+                .into_response(),
+        },
         Ok(_) => (
             StatusCode::BAD_REQUEST,
             "Query did not produce a graph result",
